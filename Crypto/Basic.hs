@@ -25,7 +25,10 @@ charsToWords :: [Char] -> [Word8]
 charsToWords = map charToWord
 
 hexsToWords :: [Char] -> [Word8]
-hexsToWords s = map (read . ("0x" ++)) $ splitEvery 2 s
+hexsToWords s = map hexToWord $ splitEvery 2 s
+
+hexToWord :: [Char] -> Word8
+hexToWord = (read . ("0x" ++))
 
 wordsToHexs :: [Word8] -> String
 wordsToHexs = concatMap (printf "%02x") 
@@ -35,3 +38,7 @@ xorTexts a b = [ xor x y | (x,y) <- zip a b ]
 
 xorChar :: Char -> Char -> Word8
 xorChar a b = xor (charToWord a) (charToWord b)
+
+allXorCombinations :: [(Char, Char, Word8)]
+allXorCombinations = [ (a,b,xorChar a b) | a <- allChars, b <- allChars ]
+  where allChars = map wordToChar [32..126]
